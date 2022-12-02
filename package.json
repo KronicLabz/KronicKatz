@@ -1,7 +1,7 @@
 {
-  "name": "cryptodoodez",
+  "name": "flinchfreedapp",
   "version": "1.0.0",
-  "description": "CryptoDoodez Public dapp",
+  "description": "FlinchCharacterDapp",
   "private": true,
   "dependencies": {
     "react": "^17.0.2",
@@ -15,7 +15,7 @@
     "web3": "^1.5.1",
     "web3-eth-contract": "^1.5.2"
   },
-  "author": "Daniel Eugene Botha (HashLips)",
+  "author": "Ali Solanki, Daniel Eugene Botha",
   "license": "MIT",
   "scripts": {
     "start": "react-scripts start",

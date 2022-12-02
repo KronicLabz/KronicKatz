@@ -43,9 +43,9 @@ export const StyledRoundButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 4px 0px -2px rgba(250, 250, 250, 0.3);
-  -webkit-box-shadow: 0px 4px 0px -2px rgba(250, 250, 250, 0.3);
-  -moz-box-shadow: 0px 4px 0px -2px rgba(250, 250, 250, 0.3);
+  box-shadow: 0px 2px 0px -1px rgba(250, 250, 250, 0.3);
+  -webkit-box-shadow: 0px 2px 0px -1px rgba(250, 250, 250, 0.3);
+  -moz-box-shadow: 0px 2px 0px -1px rgba(250, 250, 250, 0.3);
   :active {
     box-shadow: none;
     -webkit-box-shadow: none;
@@ -59,25 +59,23 @@ export const ResponsiveWrapper = styled.div`
   flex-direction: column;
   justify-content: stretched;
   align-items: stretched;
-  width: 80%;
-  height: 80%;
+  width: 100%;
   @media (min-width: 767px) {
     flex-direction: row;
   }
 `;
 
 export const StyledLogo = styled.img`
-  min-width: 30vw;
-  
-  @media (max-width: 850px) {
-    width: 80vw;
+  width: 200px;
+  @media (min-width: 767px) {
+    width: 300px;
   }
   transition: width 0.5s;
   transition: height 0.5s;
 `;
 
 export const StyledImg = styled.img`
-  box-shadow: 0px 5px 11px 2px var(--secondary);
+  box-shadow: 0px 5px 11px 2px rgba(0, 0, 0, 0.7);
   border: 4px solid var(--secondary);
   background-color: var(--accent);
   border-radius: 100%;
@@ -101,24 +99,24 @@ function App() {
   const blockchain = useSelector((state) => state.blockchain);
   const data = useSelector((state) => state.data);
   const [claimingNft, setClaimingNft] = useState(false);
-  const [feedback, setFeedback] = useState(``);
+  const [feedback, setFeedback] = useState(`Select your total count then click below to mint your NFT.`);
   const [mintAmount, setMintAmount] = useState(1);
   const [CONFIG, SET_CONFIG] = useState({
-    CONTRACT_ADDRESS: "0x19534c6bC37fD44C93F3a6506E44F32a99670f43",
-    SCAN_LINK: "https://etherscan.io/token/0x19534c6bc37fd44c93f3a6506e44f32a99670f43",
+    CONTRACT_ADDRESS: "",
+    SCAN_LINK: "",
     NETWORK: {
-      NAME: "Ethereum",
-      SYMBOL: "ETH",
-      ID: 1,
+      NAME: "",
+      SYMBOL: "",
+      ID: 0,
     },
-    NFT_NAME: "KronicKatz",
-    SYMBOL: "KRONIC",
-    MAX_SUPPLY: 10000,
-    WEI_COST: 10000000000000000,
-    DISPLAY_COST: 0.01,
-    GAS_LIMIT: 285000,
-    MARKETPLACE: "Opensea",
-    MARKETPLACE_LINK: "https://opensea.io/collection/kronickatz-nft",
+    NFT_NAME: "",
+    SYMBOL: "",
+    MAX_SUPPLY: 1,
+    WEI_COST: 0,
+    DISPLAY_COST: 0,
+    GAS_LIMIT: 0,
+    MARKETPLACE: "",
+    MARKETPLACE_LINK: "",
     SHOW_BACKGROUND: false,
   });
 
@@ -132,7 +130,7 @@ function App() {
     setFeedback(`Minting your ${CONFIG.NFT_NAME}...`);
     setClaimingNft(true);
     blockchain.smartContract.methods
-      .mint()
+      .mint( mintAmount)
       .send({
         gasLimit: String(totalGasLimit),
         to: CONFIG.CONTRACT_ADDRESS,
@@ -147,7 +145,7 @@ function App() {
       .then((receipt) => {
         console.log(receipt);
         setFeedback(
-          `WOW, the ${CONFIG.NFT_NAME} is yours! go visit Opensea.io to view it.`
+          `Bang! You've been cast in the Flinch Franchise! Come to set at ${config.MARKETPLACE_LINK}.`
         );
         setClaimingNft(false);
         dispatch(fetchData(blockchain.account));
@@ -164,8 +162,8 @@ function App() {
 
   const incrementMintAmount = () => {
     let newMintAmount = mintAmount + 1;
-    if (newMintAmount > 10) {
-      newMintAmount = 10;
+    if (newMintAmount > 5) {
+      newMintAmount = 5;
     }
     setMintAmount(newMintAmount);
   };
@@ -200,22 +198,23 @@ function App() {
       <s.Container
         flex={1}
         ai={"center"}
-        style={{ padding: 24, backgroundColor: "var(--primary)" }}
-        image={CONFIG.SHOW_BACKGROUND ? "/config/images/bg.png" : null}
+        style={{ padding: 24, backgroundColor: "var(--primary)",}}
+        image={CONFIG.SHOW_BACKGROUND ? "/config/images/bg.jpeg" : null}
       >
-        <StyledLogo alt={"logo"} src={"/config/images/logo.png"} />
+        
         <s.SpacerSmall />
-        <ResponsiveWrapper flex={1} style={{ padding: 0 }} test>
+        <ResponsiveWrapper flex={1} style={{ padding: 1}} test>
           <s.SpacerLarge />
           <s.Container
             flex={2}
             jc={"center"}
             ai={"center"}
             style={{
-              backgroundColor: "var(--accent)",
+              backgroundColor: "#0000005d",
+              padding: 24,
               borderRadius: 24,
               border: "4px solid var(--secondary)",
-              boxShadow: "0px 5px 11px 2px rgba(0,0,0,0.7)",
+              boxShadow: "0px -3px 20px 5px rgba(0, 0, 0, 0.7)",
             }}
           >
             <s.TextTitle
@@ -224,7 +223,6 @@ function App() {
                 fontSize: 50,
                 fontWeight: "bold",
                 color: "var(--accent-text)",
-                textShadow: "0px 0px 10px var(--secondary)",
               }}
             >
               {data.totalSupply} / {CONFIG.MAX_SUPPLY}
@@ -239,6 +237,32 @@ function App() {
                 {truncate(CONFIG.CONTRACT_ADDRESS, 15)}
               </StyledLink>
             </s.TextDescription>
+            <span
+              style={{
+                textAlign: "center",
+              }}
+            >
+              <StyledButton
+                onClick={(e) => {
+                  window.open("https://kroniclabz.com", "_blank");
+                }}
+                style={{
+                  margin: "5px",
+                }}
+              >
+                KronicKatz
+              </StyledButton>
+              <StyledButton
+                style={{
+                  margin: "5px",
+                }}
+                onClick={(e) => {
+                  window.open(CONFIG.MARKETPLACE_LINK, "_blank");
+                }}
+              >
+                {CONFIG.MARKETPLACE}
+              </StyledButton>
+            </span>
             <s.SpacerSmall />
             {Number(data.totalSupply) >= CONFIG.MAX_SUPPLY ? (
               <>
@@ -269,11 +293,11 @@ function App() {
                 <s.TextDescription
                   style={{ textAlign: "center", color: "var(--accent-text)" }}
                 >
-                  Excluding gas fees.
+                  Reduced mint! 0.01 ETH.
                 </s.TextDescription>
                 <s.SpacerSmall />
                 {blockchain.account === "" ||
-                  blockchain.smartContract === null ? (
+                blockchain.smartContract === null ? (
                   <s.Container ai={"center"} jc={"center"}>
                     <s.TextDescription
                       style={{
@@ -285,7 +309,6 @@ function App() {
                     </s.TextDescription>
                     <s.SpacerSmall />
                     <StyledButton
-                      style={{ color: "var(--accent-text)" }}
                       onClick={(e) => {
                         e.preventDefault();
                         dispatch(connect());
@@ -353,9 +376,6 @@ function App() {
                     <s.SpacerSmall />
                     <s.Container ai={"center"} jc={"center"} fd={"row"}>
                       <StyledButton
-                        style={{
-                          color: "var(--primary-text)",
-                        }}
                         disabled={claimingNft ? 1 : 0}
                         onClick={(e) => {
                           e.preventDefault();
@@ -363,7 +383,7 @@ function App() {
                           getData();
                         }}
                       >
-                        {claimingNft ? "BUSY" : "BUY"}
+                        {claimingNft ? "Casting Now" : "Mint Now!"}
                       </StyledButton>
                     </s.Container>
                   </>
@@ -373,13 +393,14 @@ function App() {
             <s.SpacerMedium />
           </s.Container>
           <s.SpacerLarge />
+          
         </ResponsiveWrapper>
         <s.SpacerMedium />
-        <s.Container jc={"center"} ai={"center"} style={{ width: "70%", background: 'rgba(0,0,0,0.6)' }}>
+        <s.Container jc={"center"} ai={"center"} style={{ width: "70%" }}>
           <s.TextDescription
             style={{
               textAlign: "center",
-              color: "var(--accent-text)",
+              color: "var(--primary-text)",
             }}
           >
             Please make sure you are connected to the right network (
@@ -390,7 +411,7 @@ function App() {
           <s.TextDescription
             style={{
               textAlign: "center",
-              color: "var(--accent-text)",
+              color: "var(--primary-text)",
             }}
           >
             We have set the gas limit to {CONFIG.GAS_LIMIT} for the contract to

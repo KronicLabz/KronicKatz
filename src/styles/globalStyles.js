@@ -3,7 +3,7 @@ import styled from "styled-components";
 // Used for wrapping a page component
 export const Screen = styled.div`
   background-color: var(--primary);
-  background-image: url("https://kroniclabz.mypinata.cloud/ipfs/QmX8Fei4hvUid76wxGprak22YKeQa8wSRnxRPQZ5DCjZNL");
+  background-image: ${({ image }) => (image ? `url(${image})` : "none")};
   background-size: cover;
   background-position: center;
   width: 100%;
@@ -14,7 +14,7 @@ export const Screen = styled.div`
 
 // Used for providing space between components
 export const SpacerXSmall = styled.div`
-  height: 8px;
+  height: 16px;
   width: 8px;
 `;
 
@@ -69,9 +69,8 @@ export const TextDescription = styled.p`
   line-height: 1.6;
 `;
 
-const newLocal = `
+export const StyledClickable = styled.div`
   :active {
-    opacity: 5;
+    opacity: 0.6;
   }
 `;
-export const StyledClickable = styled.divnewLocal;
